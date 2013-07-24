@@ -1,4 +1,5 @@
 #include<iostream>
+#include<map>
 #include<cmath>
 #include<cstring>
 #include<cstdio>
@@ -28,8 +29,13 @@ void allocat(int base,int n){
 
 	if(n == 8) {
 		for(int i = 0; i < n-1; i++)
-			for(int j = 0; j < n/2; j++)
-				ANS[i].PB(make_pair(spj[i][j][0]+base,spj[i][j][1]+base));
+			for(int j = 0; j < n/2; j++){
+				int x = spj[i][j][0];
+				int y = spj[i][j][1];
+				if(x > y) swap(x,y);
+				if((y - x) % 2 == 0) swap(x,y);
+				ANS[i].PB(make_pair(x+base,y+base));
+			}
 		return ;
 	}
 	
@@ -38,7 +44,9 @@ void allocat(int base,int n){
 		for(int j = 0; j < n/2; j++){
 			int x = tmp[j] + base, y = tmp[n-j-1] + base;
 			if(x > y) swap(x,y);
-			if(x!= base) ANS[i].PB(make_pair(x,y));
+			if(x == base) continue;
+			if((y - x) % 2 == 0) swap(x,y);
+			ANS[i].PB(make_pair(x,y));
 		}
 		int val = tmp.back();
 		tmp.insert(tmp.begin()+1,val);
@@ -70,6 +78,8 @@ int diff(int hash[],int n){
 	} return mx - mn;
 }
 int last[105],row;
+double factor = 0;
+map<int,int> up[100];
 int MAX(int col,int k,int n,bool flag){
 	for(int i = 1; i <= n; i++){
 		dif[i] = cal(hash[i],k);
@@ -100,12 +110,16 @@ int MAX(int col,int k,int n,bool flag){
 			hash[a][i]++;
 			hash[b][i]++;
 			double val = cal(hash[a],k) + cal(hash[b],k);
+			if(up[i][a] == 1) val += factor;
+			if(up[i][b] == 2) val += factor;
+			//cout<<up[i][a]<<" "<<up[i][b]<<endl;
 			if(diff(hash[a],k)< 10 || diff(hash[b],k)<10 || !flag)
 				if( val < mx){mx = val; s = i;}
 			hash[a][i]--;
 			hash[b][i]--;
 		}
 		if(s!=-1){
+			//cout<<mx<<endl;
 			ans[col][s] = x;
 			hash[a][s] ++;
 			hash[b][s] ++;
@@ -114,6 +128,8 @@ int MAX(int col,int k,int n,bool flag){
 			last[a] = last[b] = s;
 			t.erase(tmp);
 			vis[a] = 1; vis[b] = 1;
+			up[s][a] = 1;
+			up[s][b] = 2;
 			return 0;
 		}
 	}
@@ -151,7 +167,7 @@ void solve(int k,int n){
 	}
 }
 int main(){
-	freopen("out.txt","w",stdout);
+//	freopen("out.txt","w",stdout);
 	int m,tst,t = 0;N= 0;
 	cin >> tst >> m;
 	for(int i = 0; i < tst; i++){
@@ -161,6 +177,7 @@ int main(){
 		allocat(N,value);
 		N += value;
 	}
+	cin >> factor;
 	cout<<endl;
 	solve(m,N);
 	for(int i = 0; i < col ; i++){
@@ -169,6 +186,9 @@ int main(){
 		puts("");
 	}
 	/*
+	for(int i = 0; i < m; i++){
+		for(int j = 1; j <= N; j++)
+			cout<<up[i][j]<<" ";cout<<endl;}
 	for(int i = 1; i<= N; i++){
 		for(int j = 0; j < m ; j++)
 			cout<<hash[i][j] <<" "; cout<<endl;}

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import sys
-sys.stdin = open('out.txt','r')
+#sys.stdin = open('out.txt','r')
 a = []
 n=0
 flag = map(int,raw_input().split())
@@ -28,29 +28,44 @@ for i in range(n):
 def swap(x):
 	x[0],x[1] = x[1],x[0]
 last,recent,vis=[],[],[]
-def chk(tmp):
-	last = {}
-	ans = 0
-	for a in tmp:
+def chk(tmp,shen,qian):
+	last,lastline = {},{}
+	ans,value = 0,0
+	inf = 10**10
+	for cnt,a in enumerate(tmp):
 		x,y = a[0],a[1]
 		if x == 0 :
 			continue
 		if x not in last:
-			last[x] = 0	
+			last[x] = 0
 		elif last[x] == 1:
 			last[x] = 0
-		else :
+		else:
 			ans += 1
+			if x in lastline :
+				value += cnt - lastline[x]
 		if y not in last:
 			last[y] = 1
 		elif last[y] == 0:
 			last[y] = 1
 		else :
 			ans += 1
-	return ans
+			if y in lastline :
+				value += cnt - lastline[y]
+	#	print x,y
+		shen[x] += 1
+		qian[y] += 1
+		lastline[x] = cnt
+		lastline[y] = cnt
+	for i in range(1,N+1):
+		if(abs(shen[i] - qian[i]) > 1): return (inf,value)
+	return (ans,value)
+shen = [0] * (N+1)
+qian = [0] * (N+1)
 def work(ar):
 	maxn = 1 << n
-	s,ans = 10**10,0
+	s = 10**10,0
+	ans = 0
 	for msk in range(maxn):
 		tmp = []
 		for i in range(n):
@@ -58,8 +73,8 @@ def work(ar):
 				tmp.append([ar[i][1],ar[i][0]])
 			else :
 				tmp.append(ar[i])
-		value = chk(tmp)
-		if(value < s):
+		value = chk(tmp,shen[:],qian[:])
+		if(value[0] < s[0] or (value[0] == s[0] and value[1] > s[1])):
 			s = value
 			ans = msk
 		if(s == 0):
@@ -75,6 +90,8 @@ for j in range(m):
 	for i in range(n):
 		if ((1 << i) & x) != 0:
 			swap(a[i][j])
+		shen[a[i][j][0]] += 1
+		qian[a[i][j][1]] += 1
 for i in range(n):
 	for j in range(m):
 		x,y = a[i][j]
@@ -102,14 +119,23 @@ for i in range(m):
 		for k in range(j+1,n):
 			if a[k][i][1] == x: break
 			elif a[k][i][0] == x:
-	#			print j,k
+#				print j,k
 				conf += 1
 				break
 		y = a[j][i][1]
 		for k in range(j+1,n):
 			if a[k][i][0] == y : break
 			elif a[k][i][1] == y:
-	#			print j,k
+#				print j,k
 				conf += 1
 				break
 	print 'column',i,':',conf
+shen = [0] * (N+1)
+qian = [0] * (N+1)
+for i in range(n):
+	for j in range(m):
+		x,y = a[i][j]
+		shen[x] += 1
+		qian[y] += 1
+print shen[1:]
+print qian[1:]

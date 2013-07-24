@@ -40,7 +40,7 @@ void allocat(int base,int n){
 				int x = spj[i][j][0];
 				int y = spj[i][j][1];
 				if(x > y) swap(x,y);
-				if((y - x) % 2 == 0) swap(x,y);
+//				if((y - x) % 2 == 0) swap(x,y);
 				ANS[i].PB(make_pair(x+base,y+base));
 			}
 		return ;
@@ -52,7 +52,7 @@ void allocat(int base,int n){
 			int x = tmp[j] + base, y = tmp[n-j-1] + base;
 			if(x > y) swap(x,y);
 			if(x == base) continue;
-			if((y - x) % 2 == 0) swap(x,y);
+//			if((y - x) % 2 == 0) swap(x,y);
 			ANS[i].PB(make_pair(x,y));
 		}
 		int val = tmp.back();
@@ -91,14 +91,14 @@ int differ(int hash[N]){
 	}
 	return mx - mn;
 }
-int cntn,tmpn,TMP,best,EPS,flag,lim;
-int conf[100] ,myconf[100];
 int chk_zero(int hash[N]){
 	int ans = 0;
 	for(int i = 0; i < coln; i++)
 		ans += hash[i] == 0;
 	return ans;
 }
+int cntn,tmpn,TMP,best,EPS,flag,lim,base;
+int conf[100] ,myconf[100];
 void dfs(int x,int y,int c){
 	if(flag) return ;
 	pii temp[N];
@@ -114,9 +114,10 @@ void dfs(int x,int y,int c){
 			flag = 1;
 		}
 		if(sum < best ) {
-			for(int i = 1; i <= c; i ++)
-				if(chk_zero(hash[i]) >= 1)
+			for(int i = 1; i <= base; i++)
+				if(chk_zero(hash[i]) > 1)
 					return ;
+//			cout<<c<<endl;
 			best = sum;
 			memcpy(last_ans,ans,sizeof(ans));
 			memcpy(myconf,conf,sizeof(conf));
@@ -142,6 +143,7 @@ void dfs(int x,int y,int c){
 				if(coln < 3 || i == 0 || !conflict(ans[i-1][j],a,b))
 					
 					{
+					/*
 					for(int row = i - 1; row >= 0; row --) if(ans[row][j].first == a){
 						cost ++;
 						break;
@@ -152,13 +154,14 @@ void dfs(int x,int y,int c){
 						break;
 					} else if(ans[row][j].first == a) break;
 					if(cost + conf[j] > lim ) continue;
+					*/
 					_vis[a][i] = 1;
 					_vis[b][i] = 1;
 					ans[i][j] = p;
-					conf[j] += cost;
+				//	conf[j] += cost;
 					dfs(x,y+1,c+1);
 					if(flag) return ;
-					conf[j] -= cost;
+				//	conf[j] -= cost;
 					_vis[a][i] = 0;
 					_vis[b][i] = 0;
 					ans[i][j] = zero;
@@ -173,7 +176,8 @@ void dfs(int x,int y,int c){
 int color[105][105],lastc[105];
 int main(){
 //    freopen("out.txt","w",stdout);
-	int tst,t = 0,base = 0,myn = 0;
+	int tst,t = 0,myn = 0;
+	base = 0;
 	cin >> tst >> coln;
 	for(int i = 0; i < tst; i++){
 		int value;
@@ -193,7 +197,7 @@ int main(){
 //	cout<<"TMP: "<<TMP<<endl;
 	bool myflag = 0;
 	for( EPS = 2;; EPS++){
-		for( lim = 0; lim <= 10; lim ++){
+//		for( lim = 0; lim <= 10; lim ++){
 //			cout<<EPS<<" "<<lim<<endl;
 			memset(conf,0,sizeof(conf));
 			flag = 0;
@@ -206,8 +210,8 @@ int main(){
 				if(flag || best == TMP) break;
 				else myflag = 1;
 		};
-	}
-	if(myflag || flag || best == TMP) break;
+//	}
+//	if(myflag || flag || best == TMP) break;
 	}
 //	cout<<"BEST: "<<best<<endl;
 	for(int i = 0; i < rown; i++){
