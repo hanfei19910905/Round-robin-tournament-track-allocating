@@ -173,7 +173,6 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     TMP = !!((cntn-1) % coln) * rown;
     bool myflag = 0;
     for( EPS = 2;EPS <= 10; EPS++){
-            cout<<EPS<<endl;
             memset(conf,0,sizeof(conf));
             flag = 0;
             init();
