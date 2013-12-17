@@ -97,7 +97,6 @@ int chk_zero(int hash[N]){
 int cntn,tmpn,TMP,best,EPS,flag,lim,base;
 int conf[100] ,myconf[100];
 void dfs(int x,int y,int c){
-    //cout<<"dfs: "<<x<<" "<<y<<" "<<c<<endl;
     if(flag) return ;
     pii temp[N];
     int expt = c / tmpn;
@@ -165,7 +164,6 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
         base += value;
     }
     cntn = base;
-    cout<<cntn<<" "<<coln<<endl;
     int sum = 0;
     for(int i = 0; i < len; i++) sum += ANS[i].size();
     tmpn = min(coln,myn);
@@ -192,4 +190,4 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     }
     return 1;
 }
-}
+};

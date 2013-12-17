@@ -52,7 +52,6 @@ def chk(tmp,shen,qian):
 			ans += 1
 			if y in lastline :
 				value += cnt - lastline[y]
-	#	print x,y
 		shen[x] += 1
 		qian[y] += 1
 		lastline[x] = cnt
@@ -79,10 +78,8 @@ def work(ar):
 			ans = msk
 		if(s == 0):
 			return ans
-	#print 'ans:',s
 	return ans
 for j in range(m):
-	#print 'j',j
 	tt = []
 	for i in range(n):
 		tt.append(a[i][j])
@@ -119,14 +116,12 @@ for i in range(m):
 		for k in range(j+1,n):
 			if a[k][i][1] == x: break
 			elif a[k][i][0] == x:
-#				print j,k
 				conf += 1
 				break
 		y = a[j][i][1]
 		for k in range(j+1,n):
 			if a[k][i][0] == y : break
 			elif a[k][i][1] == y:
-#				print j,k
 				conf += 1
 				break
 	print 'column',i,':',conf
