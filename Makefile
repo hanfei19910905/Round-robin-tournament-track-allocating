@@ -1,4 +1,4 @@
 all:
-	g++ -o main main.cc
-op:
-	g++ -o main main.cc -D OPHPP
+	g++ -o main.exe main.cc -D OPHPP
+sugar: 
+	g++ -o main.exe main.cc -D WINWTF -D OPHPP
