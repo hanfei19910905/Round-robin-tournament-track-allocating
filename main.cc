@@ -41,5 +41,5 @@ int main(){
         #endif
         FORMAT::Solve(ans);
 		OP::Solve(ans,input);
-    
+        system("pause");
 }
