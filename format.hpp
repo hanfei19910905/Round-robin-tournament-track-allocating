@@ -85,7 +85,7 @@ namespace FORMAT{
             }
         return ans;
     }
-    int Solve(vector<vector<pii> >& table£¬ vector<int>& conflict){
+    int Solve(vector<vector<pii> >& table,vector<int>& conflict){
             TeamNum = GetTeamNum(table);
             memset(heavy,0,sizeof(heavy));
             memset(light,0,sizeof(light));
@@ -106,7 +106,7 @@ namespace FORMAT{
                 for(int i = 0; i < n; i++){
                     column.push_back(table[i][j]);
                 }
-                work(column, conflict[i]);
+                work(column, conflict[j]);
                 for(int i = 0; i < n; i++){
                     table[i][j] = column[i];
                     heavy[column[i].first] += 1;
