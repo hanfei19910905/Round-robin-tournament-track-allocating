@@ -70,10 +70,11 @@ namespace FORMAT{
         swap(temp[now].first,temp[now].second);
         WorkDfs(now+1,temp,array,ans);
     }
-    void work(vector<pii>& array){
+    void work(vector<pii>& array,int& conf){
         vector<pii> temp(array.begin(), array.end());
         pii ans = pii(inf,0);
         WorkDfs(0,temp,array,ans);
+        conf = ans.first;
     }
     int GetTeamNum(vector<vector<pii> >& table){
         int ans = 0;
@@ -84,12 +85,13 @@ namespace FORMAT{
             }
         return ans;
     }
-    int Solve(vector<vector<pii> >& table){
+    int Solve(vector<vector<pii> >& table£¬ vector<int>& conflict){
             TeamNum = GetTeamNum(table);
             memset(heavy,0,sizeof(heavy));
             memset(light,0,sizeof(light));
             n = table.size();
             m = table[0].size();
+            conflict.resize(m);
             vector<vector<int> > hashTbl = vector<vector<int> >(TeamNum + 1,vector<int>(m,0));
             // cal hash table
             for(int i = 0; i < n; i ++){
@@ -104,7 +106,7 @@ namespace FORMAT{
                 for(int i = 0; i < n; i++){
                     column.push_back(table[i][j]);
                 }
-                work(column);
+                work(column, conflict[i]);
                 for(int i = 0; i < n; i++){
                     table[i][j] = column[i];
                     heavy[column[i].first] += 1;

@@ -16,6 +16,8 @@ namespace OP{
                 }
             teamNum += team[i];
         }
+        vector<int> heavy = vector<int>(teamNum,0);
+        vector<int> light = vector<int>(teamNum,0);
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
                 int x = num[i][j].first,
@@ -48,6 +50,8 @@ namespace OP{
                 int y = num[i][j].second;
                 hashTable[x][j] ++;
                 hashTable[y][j] ++;
+                heavy[x] ++;
+                light[y] ++;
             }
         }
         for(int i = 1; i < teamNum;i++){
@@ -57,5 +61,9 @@ namespace OP{
             }
             puts("");
         }
+        cout<<"heavy color: ";
+        for(int i = 1; i < teamNum; i++) cout<< heavy[i]<<" ";cout<<endl;
+        cout<<"light color: ";
+        for(int i = 1; i < teamNum; i++) cout<< light[i]<<" ";cout<<endl;
     }
 };

@@ -17,6 +17,7 @@ DWORD WINAPI SingleThread(LPVOID lp){
 }
 #endif
 int main(){
+        freopen("out.txt","w",stdout);
         #ifndef POSIX 
             SUGAR::wtf();
         #endif
@@ -39,7 +40,12 @@ int main(){
             MULTI::Solve(ans,m,input);
         }
         #endif
-        FORMAT::Solve(ans);
+        vector<int> conflict;
+        FORMAT::Solve(ans,conflict);
 		OP::Solve(ans,input);
-        system("pause");
+        cout<<"conflict: ";
+        for(int i = 0; i < conflict.size(); i++){
+            cout<< conflict[i] <<" ";
+        }
+        cout<<endl;
 }
