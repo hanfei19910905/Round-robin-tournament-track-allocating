@@ -36,7 +36,7 @@ namespace FORMAT{
             else if(last.find(y) == last.end()){
                 last[y] = 1;
             } else if(0 == last[y]){
-                last[y] = 0;
+                last[y] = 1;
             } else {
                 ans ++;
                 if(lastline.find(y) != lastline.end()){
@@ -70,11 +70,13 @@ namespace FORMAT{
         swap(temp[now].first,temp[now].second);
         WorkDfs(now+1,temp,array,ans);
     }
-    void work(vector<pii>& array,int& conf){
+    bool work(vector<pii>& array,int& conf){
+        conf = 0;
         vector<pii> temp(array.begin(), array.end());
         pii ans = pii(inf,0);
         WorkDfs(0,temp,array,ans);
         conf = ans.first;
+        return conf!=inf;
     }
     int GetTeamNum(vector<vector<pii> >& table){
         int ans = 0;
@@ -101,17 +103,27 @@ namespace FORMAT{
                         hashTbl[table[i][j].second][j] ++;
                     }}}
             //
-            for(int j = 0; j < m; j++){
-                vector<pii> column;
-                for(int i = 0; i < n; i++){
-                    column.push_back(table[i][j]);
+            vector<int> fail = vector<int>(m,1);
+            for(;;){
+                bool flag = 0;
+                for(int j = 0; j < m; j++) if(fail[j]){
+                    vector<pii> column;
+                    for(int i = 0; i < n; i++){
+                        column.push_back(table[i][j]);
+                    }
+                    if(work(column, conflict[j]) == 0){
+                        continue;
+                    } else {
+                        flag = 1;
+                        fail[j] = 0;
+                    }
+                    for(int i = 0; i < n; i++){
+                        table[i][j] = column[i];
+                        heavy[column[i].first] += 1;
+                        light[column[i].second] += 1;
+                    }
                 }
-                work(column, conflict[j]);
-                for(int i = 0; i < n; i++){
-                    table[i][j] = column[i];
-                    heavy[column[i].first] += 1;
-                    light[column[i].second] += 1;
-                }
+                if(!flag) break;
             }
     }
 };
