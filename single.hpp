@@ -96,6 +96,7 @@ int chk_zero(int hash[N]){
 }
 int cntn,tmpn,TMP,best,EPS,flag,lim,base;
 int conf[100] ,myconf[100];
+bool tight_col;
 void dfs(int x,int y,int c){
     if(flag) return ;
     pii temp[N];
@@ -133,7 +134,7 @@ void dfs(int x,int y,int c){
         if(differ(hash[a]) <= dif && differ(hash[b]) <= dif) {
             int i = expt,cost = 0;
                 if(ans[i][j] == zero && !_vis[a][i] && !_vis[b][i]) 
-                if(coln < 3 || i == 0 || !conflict(ans[i-1][j],a,b))
+                if(tight_col || i == 0 || !conflict(ans[i-1][j],a,b))
                     
                     {
                     _vis[a][i] = 1;
@@ -163,6 +164,10 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
         allocat(base,value);
         base += value;
     }
+    tight_col = 0;
+    if(coln < 3) tight_col = 1;
+    if(coln == 3 && base == 8) tight_col = 1;
+//    cout<<"tight_col: "<<tight_col<<endl;
     cntn = base;
     int sum = 0;
     for(int i = 0; i < len; i++) sum += ANS[i].size();

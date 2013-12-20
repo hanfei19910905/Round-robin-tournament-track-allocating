@@ -1,9 +1,27 @@
 #include<iostream>
+#include<map>
 #include<vector>
 #include<cstdio>
 using namespace std;
 namespace OP{
     typedef pair<int,int> pii;
+        inline void cal(int &conf,int team,map<int,int> &mp,int t){
+            if(mp.find(team) == mp.end()){
+                mp[team] = t;
+                return ;
+            }
+            conf += (mp[team] == t);
+            mp[team] = t;
+        }
+        int chk(vector<pii>& v){
+            int conf = 0;
+            map<int,int> mp;
+            for(int i = 0; i < v.size(); i++) if(v[i].first){
+                cal(conf,v[i].first,mp,0);
+                cal(conf,v[i].second,mp,1);
+            }
+            return conf;
+        }
     void Solve(vector<vector<pii> > num,vector<int> team){
         int n = num.size();
         int m = num[0].size();
@@ -65,5 +83,14 @@ namespace OP{
         for(int i = 1; i < teamNum; i++) cout<< heavy[i]<<" ";cout<<endl;
         cout<<"light color: ";
         for(int i = 1; i < teamNum; i++) cout<< light[i]<<" ";cout<<endl;
+        cout<<"conflict: ";
+        for(int j = 0; j < m; j++){
+            vector<pii> tmp;
+            for(int i = 0; i < n; i++){
+                tmp.push_back(num[i][j]);
+            }
+            cout<<chk(tmp)<<" ";
+        }
+        cout<<endl;
     }
 };

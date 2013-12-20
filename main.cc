@@ -43,9 +43,4 @@ int main(){
         vector<int> conflict;
         FORMAT::Solve(ans,conflict);
 		OP::Solve(ans,input);
-        cout<<"conflict: ";
-        for(int i = 0; i < conflict.size(); i++){
-            cout<< conflict[i] <<" ";
-        }
-        cout<<endl;
 }
