@@ -40,7 +40,6 @@ int main(){
             MULTI::Solve(ans,m,input);
         }
         #endif
-        vector<int> conflict;
-        FORMAT::Solve(ans,conflict);
+        FORMAT::Solve(ans);
 		OP::Solve(ans,input);
 }

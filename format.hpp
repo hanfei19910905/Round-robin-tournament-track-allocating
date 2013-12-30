@@ -6,6 +6,7 @@
 using namespace std;
 namespace FORMAT{
     typedef pair<int,int> pii;
+    // heavy[i]是队伍i用了几次深壶
     int heavy[1005] = {0};
     int light[1005] = {0};
     int TeamNum,n,m;
@@ -13,6 +14,7 @@ namespace FORMAT{
     bool cmp(pii a,pii b){
         return a.first > b.first || (a.first == b.first && a.second < b.second);
     }
+    //check是检查方案arr的冲突数，和冲突距离总和，冲突越少越好，距离越大越好。
     pii check(vector<pii>& arr){
         map<int,int> last,lastline;
         int ans = 0, value = 0;
@@ -53,6 +55,7 @@ namespace FORMAT{
          return pii(ans,value);
         
     }
+    // temp是当前搜索方案，array是当前最好结果，ans.first代表冲突个数，ans.second代表冲突的队伍的距离。
     void WorkDfs(int now,vector<pii>& temp,vector<pii>& array,pii& ans){
         if(now == n){
             pii temp_ans = check(temp);
@@ -70,14 +73,15 @@ namespace FORMAT{
         swap(temp[now].first,temp[now].second);
         WorkDfs(now+1,temp,array,ans);
     }
-    bool work(vector<pii>& array,int& conf){
-        conf = 0;
+    // work返回值为0代表没有方案
+    // 否则返回值为1, 方案记录在array中
+    bool work(vector<pii>& array){
         vector<pii> temp(array.begin(), array.end());
         pii ans = pii(inf,0);
         WorkDfs(0,temp,array,ans);
-        conf = ans.first;
-        return conf!=inf;
+        return ans.first != inf;
     }
+    // 计算总队伍数，为了保证接口统一没有作为参数传进来。
     int GetTeamNum(vector<vector<pii> >& table){
         int ans = 0;
         for(int i = 0; i < table.size(); ++i)
@@ -87,22 +91,21 @@ namespace FORMAT{
             }
         return ans;
     }
-    int Solve(vector<vector<pii> >& table,vector<int>& conflict){
+    int Solve(vector<vector<pii> >& table){
             TeamNum = GetTeamNum(table);
             memset(heavy,0,sizeof(heavy));
             memset(light,0,sizeof(light));
             n = table.size();
             m = table[0].size();
-            conflict.resize(m);
             vector<vector<int> > hashTbl = vector<vector<int> >(TeamNum + 1,vector<int>(m,0));
-            // cal hash table
+            // 计算分布率
             for(int i = 0; i < n; i ++){
                 for(int j = 0; j < m; j++){
                     if(0 != table[i][j].first){
                         hashTbl[table[i][j].first][j] ++;
                         hashTbl[table[i][j].second][j] ++;
                     }}}
-            //
+            // fail[i] = 1 代表赛道i没有合法深浅壶分布方案
             vector<int> fail = vector<int>(m,1);
             for(;;){
                 bool flag = 0;
@@ -111,7 +114,8 @@ namespace FORMAT{
                     for(int i = 0; i < n; i++){
                         column.push_back(table[i][j]);
                     }
-                    if(work(column, conflict[j]) == 0){
+                    // 提取出一列，为数组column
+                    if(work(column) == 0){
                         continue;
                     } else {
                         flag = 1;
