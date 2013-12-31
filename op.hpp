@@ -5,23 +5,25 @@
 using namespace std;
 namespace OP{
     typedef pair<int,int> pii;
-        inline void cal(int &conf,int team,map<int,int> &mp,int t){
-            if(mp.find(team) == mp.end()){
-                mp[team] = t;
-                return ;
-            }
-            conf += (mp[team] == t);
+    // conf是冲突数，是需要返回的结果，team是当前队伍，mp是已经用了哪些东西的集合，t = 0表示team在前，否则team在后。
+    inline void cal(int &conf,int team,map<int,int> &mp,int t){
+        if(mp.find(team) == mp.end()){
             mp[team] = t;
+            return ;
         }
-        int chk(vector<pii>& v){
-            int conf = 0;
-            map<int,int> mp;
-            for(int i = 0; i < v.size(); i++) if(v[i].first){
-                cal(conf,v[i].first,mp,0);
-                cal(conf,v[i].second,mp,1);
-            }
-            return conf;
+        conf += (mp[team] == t);
+        mp[team] = t;
+    }
+    // 
+    int chk(vector<pii>& v){
+        int conf = 0;
+        map<int,int> mp;
+        for(int i = 0; i < v.size(); i++) if(v[i].first){
+            cal(conf,v[i].first,mp,0);
+            cal(conf,v[i].second,mp,1);
         }
+        return conf;
+    }
     void Solve(vector<vector<pii> > num,vector<int> team){
         int n = num.size();
         int m = num[0].size();

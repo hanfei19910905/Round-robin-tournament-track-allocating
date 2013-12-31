@@ -27,8 +27,6 @@ int spj[8][4][2] = {
 vector<pii> ANS[105];
 void allocat(int base,int n){
     // 这部分逻辑和单组的allocat函数是一样的，用固定轮转法生成一个“估计结果”，存放在ANS数组中。
-    vector<int> tmp;
-    for(int i = 1; i<=n; i++) tmp.PB(i);
     if(n == 8) {
         for(int i = 0; i < n-1; i++)
             for(int j = 0; j < n/2; j++){
@@ -40,7 +38,8 @@ void allocat(int base,int n){
             }
         return ;
     }
-    
+    vector<int> tmp;
+    for(int i = 1; i<=n; i++) tmp.PB(i);
     if(n&1) {tmp.PB(0);n++;}
     for(int i =0 ; i <n-1;i++){
         for(int j = 0; j < n/2; j++){

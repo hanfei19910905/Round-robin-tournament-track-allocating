@@ -5,8 +5,11 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+// ans是最终分布情况
 vector<vector<pair<int,int> > > ans;
+// input数组是队伍数
 vector<int> input;
+// n是分组数，m是赛道数
 int n,m;
 #ifndef POSIX
 #include "sugar.hpp"
@@ -31,7 +34,6 @@ int main(){
         for(int i = 0; i < n; i++){
             scanf("%d",&input[i]);
         }
-
         #ifndef POSIX
         // 这部分是先让单组程序跑数据，超过了10秒就让多组跑
         HANDLE threadHandle = CreateThread(NULL,0,SingleThread,NULL,0,NULL);
