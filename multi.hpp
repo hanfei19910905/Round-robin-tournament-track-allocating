@@ -14,6 +14,7 @@ using namespace std;
 namespace MULTI{
 typedef pair<int,int> pii;
 int val[100],N,vis[100];
+// 队伍数量为8的特殊考虑，这是一个三维数组
 int spj[8][4][2] = {
     {{1,2},{3,4},{5,6},{7,8}},
     {{5,3},{1,7},{2,8},{6,4}},
@@ -25,6 +26,7 @@ int spj[8][4][2] = {
 };
 vector<pii> ANS[105];
 void allocat(int base,int n){
+    // 这部分逻辑和单组的allocat函数是一样的，用固定轮转法生成一个“估计结果”，存放在ANS数组中。
     vector<int> tmp;
     for(int i = 1; i<=n; i++) tmp.PB(i);
     if(n == 8) {
@@ -60,6 +62,7 @@ double dif[105];
 bool cmp1(pii a,pii b){
     return (dif[a.first] + dif[a.second]) * (SUM[b.first] + SUM[b.second]) > (dif[b.first] + dif[b.second]) * (SUM[a.first] + SUM[a.second]);
 }
+// cal函数的作用是计算hash数组的方差
 double cal(int hash[],int k){
     double sum = 0,val = 0;
     for(int j = 0; j < k; j++)
@@ -69,6 +72,7 @@ double cal(int hash[],int k){
         val += pow(abs(hash[j] - sum),2);
     return val;
 }
+// diff函数的作用是计算分布率最大最小值插叙。
 int diff(int hash[],int n){
     int mx = 0,mn = 1000000000;
     for(int i = 0; i < n;i++){
@@ -79,6 +83,7 @@ int diff(int hash[],int n){
 int last[105],row;
 double factor = 0.3;
 map<int,int> up[100];
+//
 int MAX(int col,int k,int n,bool flag){
     for(int i = 1; i <= n; i++){
         dif[i] = cal(hash[i],k);
@@ -153,6 +158,7 @@ void solve(int k,int n){
         if(a == -2) break;
     }
 }
+
 int Solve(vector<vector<pii> >& __ans,int m,vector<int> input){
     int tst = input.size(),t = 0;N= 0;
     for(int i = 0; i < tst; i++){

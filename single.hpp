@@ -65,6 +65,7 @@ int _vis[N][N];
 pii ans[N][N];
 pii last_ans[N][N];
 int last[N],use[N];
+// 初始化一些全局变量
 bool init(){
     memset(last,-1,sizeof(last));
     memset(hash,0,sizeof(hash));
@@ -75,11 +76,13 @@ bool init(){
             ans[i][j] = zero;
     return 1;
 }
+// conflict数组计算比赛x(即x.first,x.second)和比赛(a,b)是否能排在相邻两轮
 bool conflict(pii x,int a,int b){
     if(x == zero) return 0;
     int c = x.first, d = x.second;
     return a == c || a == d || c == b || b == d;
 }
+// differ 计算某个队伍的hash（分布律）数组的最大最小值的差
 int differ(int hash[N]){
     int mx = -1, mn = coln+1;
     for(int i = 0; i < coln; i++){
@@ -88,6 +91,7 @@ int differ(int hash[N]){
     }
     return mx - mn;
 }
+// chk_zero counts all the zeros in array hash
 int chk_zero(int hash[N]){
     int ans = 0;
     for(int i = 0; i < coln; i++)
@@ -97,20 +101,33 @@ int chk_zero(int hash[N]){
 int cntn,tmpn,TMP,best,EPS,flag,lim,base;
 int conf[100] ,myconf[100];
 bool tight_col;
+// dfs 计算最终结果并储存在last_ans中
+// 将分布律储存在hash中
+// 全局变量flag = 1说明找到了最理想结果
+// len是比赛预期的轮数
+// 参数x,y代表计算到了比赛ANS[x][y]，在当前dfs中，需要为它安排一个赛道。
+// c是已经安排了几场比赛
 void dfs(int x,int y,int c){
+    // 如果找到了最理想结果，则不必继续搜索
     if(flag) return ;
     pii temp[N];
+    // expt表示比赛(x,y)预计要安排到的轮次数
     int expt = c / tmpn;
     int sum = 0;
     for(int i = 1; i <= cntn; i++)
         sum += differ(hash[i]);
+    // sum表示当前的方差和
     if(sum > TMP+EPS) return;
+    // 此处是一个剪枝，如果继续搜索没有当前结果好，则舍弃
     if(y == ANS[x].size()) x ++, y = 0;
     if(x == len) {
+        // 搜索到终点
         if(sum == TMP) {
             flag = 1;
         }
+        // 如果当前结果比最优结果好，那么记录当前结果
         if(sum < best ) {
+            // 按照之前的要求，某行的轮空不超过1
             for(int i = 1; i <= base; i++)
                 if(chk_zero(hash[i]) > 1)
                     return ;
@@ -124,19 +141,20 @@ void dfs(int x,int y,int c){
     int a =p.first, b = p.second;
     for(int i =  0; i < coln; i++)
         temp[i] = make_pair(use[i],i);
+    // 数组use是赛道的使用频率
     sort(temp,temp+coln);
+    // 先从使用频率最小的赛道开始检查
     for(int  q = 0; q < coln; q++){
         int j = temp[q].second;
         hash[a][j]++;
         hash[b][j]++;
         use[j] ++;
+        // 假设选择赛道j，更新hash && use 数组
         int dif = coln <= 4 ? 3 : 2;
         if(differ(hash[a]) <= dif && differ(hash[b]) <= dif) {
             int i = expt,cost = 0;
-                if(ans[i][j] == zero && !_vis[a][i] && !_vis[b][i]) 
-                if(tight_col || i == 0 || !conflict(ans[i-1][j],a,b))
-                    
-                    {
+            if(ans[i][j] == zero && !_vis[a][i] && !_vis[b][i]) 
+                if(tight_col || i == 0 || !conflict(ans[i-1][j],a,b)){
                     _vis[a][i] = 1;
                     _vis[b][i] = 1;
                     ans[i][j] = p;
@@ -145,7 +163,7 @@ void dfs(int x,int y,int c){
                     _vis[a][i] = 0;
                     _vis[b][i] = 0;
                     ans[i][j] = zero;
-                    }
+                }
         }
         use[j]--;
         hash[a][j]--;
@@ -167,7 +185,6 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     tight_col = 0;
     if(coln < 3) tight_col = 1;
     if(coln == 3 && base == 8) tight_col = 1;
-//    cout<<"tight_col: "<<tight_col<<endl;
     cntn = base;
     int sum = 0;
     for(int i = 0; i < len; i++) sum += ANS[i].size();
@@ -176,16 +193,16 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     TMP = !!((cntn-1) % coln) * rown;
     bool myflag = 0;
     for( EPS = 2;; EPS++){
-            memset(conf,0,sizeof(conf));
-            flag = 0;
-            init();
-            if(!myflag) best = 10000;
-            dfs(0,0,0);
-            if(myflag) break;
-            if(best != 10000) {
-                if(flag || best == TMP) break;
-                else myflag = 1;
-            }
+        memset(conf,0,sizeof(conf));
+        flag = 0;
+        init();
+        if(!myflag) best = 10000;
+        dfs(0,0,0);
+        if(myflag) break;
+        if(best != 10000) {
+            if(flag || best == TMP) break;
+            else myflag = 1;
+        }
     }
     __ans.resize(rown);
     for(int i = 0; i < rown; i++){
