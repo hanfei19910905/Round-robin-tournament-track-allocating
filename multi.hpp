@@ -83,7 +83,7 @@ int diff(int hash[],int n){
 int last[105],row;
 double factor = 0.3;
 map<int,int> up[100];
-//
+//为某个队伍在论次col贪心选择一个赛道
 int MAX(int col,int k,int n,bool flag){
     for(int i = 1; i <= n; i++){
         dif[i] = cal(hash[i],k);
@@ -104,6 +104,7 @@ int MAX(int col,int k,int n,bool flag){
                 break;
             }
         }
+        // x是确定要选择的比赛
         if(x == ZERO) return -1;
         int a = x.first, b= x.second,s = -1;double mx = 1e20;
         for(int i = 0; i < k; i++) if(ans[col][i] == ZERO) {
@@ -118,6 +119,7 @@ int MAX(int col,int k,int n,bool flag){
             hash[a][i]--;
             hash[b][i]--;
         }
+        // s是为x分配的赛道
         if(s!=-1){
             ans[col][s] = x;
             hash[a][s] ++;
@@ -139,6 +141,7 @@ void solve(int k,int n){
     for(int i = 1; i <= n; i++)
         last[i] = k;
     bool flag = 1;
+    // ans是最终结果，col代表选到了第几个论次
     for(int _=0;_<105;_++){
         memset(vis,0,sizeof(vis));
         for(int i = 0; i < k; i++)

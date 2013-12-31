@@ -26,6 +26,7 @@ int spj[8][4][2] = {
 };
 bool tmp[105], odd[105];
 void allocat(int base,int n){
+    // 使用固定轮转法确定比赛，将结果存放在ANS中。
     for(int i = 1; i <= n; i++){
         tmp[i + base] = n&1;
         odd[i + base] = i&1;
@@ -154,6 +155,7 @@ void dfs(int x,int y,int c){
         if(differ(hash[a]) <= dif && differ(hash[b]) <= dif) {
             int i = expt,cost = 0;
             if(ans[i][j] == zero && !_vis[a][i] && !_vis[b][i]) 
+                // tight_col是代表列数 <=2
                 if(tight_col || i == 0 || !conflict(ans[i-1][j],a,b)){
                     _vis[a][i] = 1;
                     _vis[b][i] = 1;
@@ -165,6 +167,7 @@ void dfs(int x,int y,int c){
                     ans[i][j] = zero;
                 }
         }
+        // 搜索结束，回溯
         use[j]--;
         hash[a][j]--;
         hash[b][j]--;
@@ -179,6 +182,7 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     for(int i = 0; i < tst; i++){
         int value = input[i];
         myn += value/2;
+        // 使用固定轮转法确定比赛
         allocat(base,value);
         base += value;
     }
@@ -193,6 +197,7 @@ int Solve(vector<vector<pii> >& __ans,int loc_coln,vector<int> input){
     TMP = !!((cntn-1) % coln) * rown;
     bool myflag = 0;
     for( EPS = 2;; EPS++){
+        // 逐步放宽EPS值的限制
         memset(conf,0,sizeof(conf));
         flag = 0;
         init();
