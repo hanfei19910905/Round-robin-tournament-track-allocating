@@ -6,7 +6,9 @@ this is a track-allocting programme for Curling events which use Round-robin-tou
 how to use
 ==========
 
-first of all, make sure you have make and g++ (mingw in windows) and use make sugar to compile in windows
+first of all, make sure you have make and g++ (mingw in windows)
+use make to compile in windows
+use make posix to complie in Linux
 and firstly input group number n, secondly input track number m.
 then input n number , which stands for the team number.
 

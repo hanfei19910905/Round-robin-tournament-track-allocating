@@ -14,7 +14,7 @@ namespace OP{
         conf += (mp[team] == t);
         mp[team] = t;
     }
-    // 
+    // 检查数组v的冲突个数
     int chk(vector<pii>& v){
         int conf = 0;
         map<int,int> mp;
@@ -24,6 +24,7 @@ namespace OP{
         }
         return conf;
     }
+    // num是比赛排布方案，team是队伍分组
     void Solve(vector<vector<pii> > num,vector<int> team){
         int n = num.size();
         int m = num[0].size();
@@ -36,6 +37,7 @@ namespace OP{
                 }
             teamNum += team[i];
         }
+        // 输出方案，计算先后手
         vector<int> heavy = vector<int>(teamNum,0);
         vector<int> light = vector<int>(teamNum,0);
         for(int i = 0; i < n; i++){
@@ -62,8 +64,8 @@ namespace OP{
             printf("\n");
         }
         even.clear();
-        vector<vector<int> > hashTable = vector<vector<int> >(
-        teamNum ,vector<int>(m,0));
+        // 计算分布率
+        vector<vector<int> > hashTable = vector<vector<int> >(teamNum ,vector<int>(m,0));
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
                 int x = num[i][j].first;
@@ -81,10 +83,12 @@ namespace OP{
             }
             puts("");
         }
+        // 统计深浅壶个数
         cout<<"heavy color: ";
         for(int i = 1; i < teamNum; i++) cout<< heavy[i]<<" ";cout<<endl;
         cout<<"light color: ";
         for(int i = 1; i < teamNum; i++) cout<< light[i]<<" ";cout<<endl;
+        // 计算冲突率
         cout<<"conflict: ";
         for(int j = 0; j < m; j++){
             vector<pii> tmp;

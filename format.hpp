@@ -7,17 +7,24 @@ using namespace std;
 namespace FORMAT{
     typedef pair<int,int> pii;
     // heavy[i]是队伍i用了几次深壶
+    // light[i]是队伍i用了几次浅壶
     int heavy[1005] = {0};
     int light[1005] = {0};
+    // TeamNum是队伍总数，n是分组数，m是赛道数
     int TeamNum,n,m;
+    // 设置最大值
     const int inf = 1e9;
     bool cmp(pii a,pii b){
         return a.first > b.first || (a.first == b.first && a.second < b.second);
     }
     //check是检查方案arr的冲突数，和冲突距离总和，冲突越少越好，距离越大越好。
     pii check(vector<pii>& arr){
+        // last[i]代表当前赛道队伍i最后一次出现的是深壶 or 浅壶
+        // lastline[i]代表队伍i在上次出线的论次
         map<int,int> last,lastline;
+        // ans是冲突数，value是冲突所在队伍的总和。
         int ans = 0, value = 0;
+        // heavyVec代表当前heavy的情况
         vector<int> heavyVec(heavy,heavy+TeamNum + 1);
         vector<int> lightVec(light,light+TeamNum + 1);
         for(int i = 0; i < arr.size(); i++){
@@ -91,6 +98,7 @@ namespace FORMAT{
             }
         return ans;
     }
+    // table传入的是未排布深浅壶时的方案。
     int Solve(vector<vector<pii> >& table){
             TeamNum = GetTeamNum(table);
             memset(heavy,0,sizeof(heavy));
